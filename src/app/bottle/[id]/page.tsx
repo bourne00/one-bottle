@@ -20,10 +20,10 @@ export default function BottlePage() {
         if (data.bottle) {
           setBottle(data.bottle);
         } else {
-          setError('瓶子不存在或已被删除');
+          setError('This bottle did not make it.');
         }
       } catch (e) {
-        setError('加载失败');
+        setError('Failed to load');
       } finally {
         setLoading(false);
       }
@@ -37,20 +37,22 @@ export default function BottlePage() {
   if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center">
-        <div className="text-orange-500 text-xl animate-pulse">加载中...</div>
+        <div className="text-amber-600 text-lg loading-pulse font-light tracking-wide">
+          Loading...
+        </div>
       </div>
     );
   }
 
   if (error) {
     return (
-      <div className="min-h-screen flex items-center justify-center p-4">
-        <div className="card text-center max-w-md">
-          <div className="text-5xl mb-4">🌊</div>
-          <h1 className="text-xl font-bold text-gray-800 mb-2">{error}</h1>
-          <p className="text-gray-600 mb-6">这个瓶子可能已经漂走了</p>
+      <div className="min-h-screen flex flex-col items-center justify-center p-4">
+        <div className="card text-center max-w-md animate-fade-in">
+          <div className="text-4xl mb-4 opacity-60">~</div>
+          <h1 className="font-serif text-2xl text-amber-800 mb-3">{error}</h1>
+          <p className="text-warm mb-8">Some things are meant to stay unshared.</p>
           <Link href="/" className="btn-primary inline-block">
-            返回首页
+            Return home
           </Link>
         </div>
       </div>
@@ -58,65 +60,87 @@ export default function BottlePage() {
   }
 
   return (
-    <div className="min-h-screen py-8 px-4">
-      <div className="max-w-2xl mx-auto">
-        {/* 头部 */}
-        <div className="flex items-center justify-between mb-6">
-          <Link href="/" className="text-orange-600 hover:text-orange-700 flex items-center gap-2">
-            <span>←</span>
-            <span className="font-bold text-xl">One Bottle</span>
-          </Link>
-        </div>
+    <div className="min-h-screen flex flex-col">
+      <main className="flex-1 py-12 px-4">
+        <div className="max-w-2xl mx-auto">
+          {/* Header */}
+          <div className="flex items-center justify-between mb-8 animate-fade-in">
+            <Link href="/" className="text-amber-700 hover:text-amber-800 flex items-center gap-2 transition-colors">
+              <span className="text-lg">←</span>
+              <span className="font-serif text-xl">One Bottle</span>
+            </Link>
+          </div>
 
-        {/* 内容 */}
-        <div className="card">
-          <p className="text-gray-500 text-sm mb-4">来自某人的 2025</p>
-          
-          {bottle.content_type === 'video' ? (
-            <video
-              src={bottle.content_url}
-              controls
-              className="w-full rounded-xl"
-            />
-          ) : (
-            <img
-              src={bottle.content_url}
-              alt="Bottle content"
-              className="w-full rounded-xl"
-            />
-          )}
+          {/* Content */}
+          <div className="card animate-fade-in delay-100" style={{ opacity: 0 }}>
+            <p className="text-warm-light text-sm italic mb-6">A moment from someone's 2025</p>
+            
+            {bottle.content_type === 'video' ? (
+              <video
+                src={bottle.content_url}
+                controls
+                className="w-full rounded-lg"
+              />
+            ) : (
+              <img
+                src={bottle.content_url}
+                alt="A bottle's content"
+                className="w-full rounded-lg"
+              />
+            )}
 
-          {/* 分享 */}
-          <div className="mt-6 flex gap-3">
-            <button
-              onClick={() => {
-                navigator.clipboard.writeText(window.location.href);
-                toast.success('链接已复制');
-              }}
-              className="flex-1 btn-secondary text-sm py-3"
-            >
-              🔗 复制链接
-            </button>
-            <a
-              href={`https://twitter.com/intent/tweet?text=${encodeURIComponent('我在 One Bottle 发现了一个瓶子 🍾')}&url=${encodeURIComponent(window.location.href)}`}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="flex-1 btn-secondary text-sm py-3 text-center"
-            >
-              𝕏 分享
-            </a>
+            {/* Share buttons */}
+            <div className="mt-8 flex gap-3">
+              <button
+                onClick={() => {
+                  navigator.clipboard.writeText(window.location.href);
+                  toast.success('Link copied');
+                }}
+                className="flex-1 btn-secondary text-sm py-3"
+              >
+                Copy link
+              </button>
+              <a
+                href={`https://twitter.com/intent/tweet?text=${encodeURIComponent('I found a bottle from 2025')}&url=${encodeURIComponent(typeof window !== 'undefined' ? window.location.href : '')}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex-1 btn-secondary text-sm py-3 text-center"
+              >
+                Share on 𝕏
+              </a>
+            </div>
+          </div>
+
+          {/* CTA */}
+          <div className="mt-12 text-center animate-fade-in delay-200" style={{ opacity: 0 }}>
+            <p className="text-warm mb-4">Want to discover more?</p>
+            <Link href="/" className="btn-primary inline-block">
+              Explore One Bottle
+            </Link>
           </div>
         </div>
+      </main>
 
-        {/* CTA */}
-        <div className="mt-8 text-center">
-          <p className="text-gray-600 mb-4">想发现更多瓶子？</p>
-          <Link href="/" className="btn-primary inline-block">
-            探索 One Bottle
-          </Link>
+      {/* Footer */}
+      <footer className="py-12 px-4 text-center">
+        <div className="max-w-md mx-auto">
+          <p className="text-warm text-sm leading-relaxed mb-4">
+            We welcome you to share your 2025 with the world,<br />
+            and we hope 2026 will be even better!
+          </p>
+          <p className="text-warm-light text-xs opacity-60">
+            Built quietly by{' '}
+            <a 
+              href="https://x.com/linghuchong" 
+              target="_blank" 
+              rel="noopener noreferrer"
+              className="hover:text-amber-600 transition-colors"
+            >
+              @linghuchong
+            </a>
+          </p>
         </div>
-      </div>
+      </footer>
     </div>
   );
 }
-
