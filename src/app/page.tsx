@@ -78,7 +78,7 @@ export default function Home() {
   // 开始上传流程（进入冷静期）
   const handleStartUpload = () => {
     if (!file) {
-      toast.error('请先选择文件');
+      toast.error('Please select a file first');
       return;
     }
     startCooldown();
@@ -105,16 +105,16 @@ export default function Home() {
       const data = await res.json();
 
       if (res.ok) {
-        toast.success('🍾 你的瓶子已投入大海！');
+        toast.success('Your bottle is now drifting in the sea');
         setHasBottle(true);
         setFile(null);
         setShowUploadConfirm(false);
         clearCooldown();
       } else {
-        toast.error(data.error || '上传失败');
+        toast.error(data.error || 'Upload failed');
       }
     } catch (e) {
-      toast.error('上传失败，请重试');
+      toast.error('Upload failed. Please try again.');
     } finally {
       setUploading(false);
     }
@@ -131,7 +131,7 @@ export default function Home() {
   // 打开随机瓶子
   const handleOpenBottle = async () => {
     if (!canViewMore()) {
-      toast.error('今日浏览次数已用完');
+      toast.error("That's all for today");
       return;
     }
 
@@ -153,10 +153,10 @@ export default function Home() {
       } else if (data.error) {
         toast.error(data.error);
       } else {
-        toast('暂时没有新的瓶子了', { icon: '🌊' });
+        toast('No new bottles right now', { icon: '🌊' });
       }
     } catch (e) {
-      toast.error('获取失败');
+      toast.error('Failed to fetch');
     } finally {
       setFetchingBottle(false);
     }
@@ -180,242 +180,272 @@ export default function Home() {
   if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center">
-        <div className="text-orange-500 text-xl animate-pulse">加载中...</div>
+        <div className="text-amber-600 text-lg loading-pulse font-light tracking-wide">
+          Loading...
+        </div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen py-8 px-4">
-      <div className="max-w-4xl mx-auto">
-        
-        {/* 标题 */}
-        <header className="text-center mb-10 pt-4">
-          <h1 className="text-5xl md:text-7xl font-bold mb-4">
-            <span className="bg-gradient-to-r from-orange-500 to-orange-600 bg-clip-text text-transparent">
+    <div className="min-h-screen flex flex-col">
+      <main className="flex-1 py-12 px-4">
+        <div className="max-w-2xl mx-auto">
+          
+          {/* Header */}
+          <header className="text-center mb-16 pt-8 animate-fade-in">
+            <h1 className="font-serif text-4xl md:text-5xl lg:text-6xl font-normal mb-6 text-amber-800 tracking-tight">
               One Bottle
-            </span>
-          </h1>
-          <p className="text-xl md:text-2xl text-orange-700">
-            One person. One bottle. One story.
-          </p>
-          <p className="mt-3 text-gray-600 max-w-lg mx-auto">
-            每人仅有一次机会，将你的故事投入数字海洋
-          </p>
-        </header>
+            </h1>
+            <p className="text-lg md:text-xl text-warm font-light italic">
+              One person. One bottle. One story.
+            </p>
+          </header>
 
-        {/* 倒计时 */}
-        <div className="card max-w-xl mx-auto mb-8 text-center">
-          <p className="text-orange-600 font-medium mb-3">距离封存还有</p>
-          <div className="flex justify-center gap-3">
-            <div className="bg-orange-50 rounded-xl px-5 py-3">
-              <div className="text-3xl font-bold text-orange-600">{countdown.days}</div>
-              <div className="text-xs text-orange-500">天</div>
-            </div>
-            <div className="bg-orange-50 rounded-xl px-5 py-3">
-              <div className="text-3xl font-bold text-orange-600">{countdown.hours}</div>
-              <div className="text-xs text-orange-500">时</div>
-            </div>
-            <div className="bg-orange-50 rounded-xl px-5 py-3">
-              <div className="text-3xl font-bold text-orange-600">{countdown.minutes}</div>
-              <div className="text-xs text-orange-500">分</div>
+          {/* Countdown */}
+          <div className="card-subtle max-w-md mx-auto mb-12 text-center animate-fade-in delay-100" style={{ opacity: 0 }}>
+            <p className="text-warm-light text-sm uppercase tracking-widest mb-4">Time remaining</p>
+            <div className="flex justify-center gap-6">
+              <div className="text-center">
+                <div className="font-serif text-3xl md:text-4xl text-amber-700">{countdown.days}</div>
+                <div className="text-xs text-warm-light uppercase tracking-wider mt-1">days</div>
+              </div>
+              <div className="text-warm-light text-2xl font-light">:</div>
+              <div className="text-center">
+                <div className="font-serif text-3xl md:text-4xl text-amber-700">{countdown.hours}</div>
+                <div className="text-xs text-warm-light uppercase tracking-wider mt-1">hours</div>
+              </div>
+              <div className="text-warm-light text-2xl font-light">:</div>
+              <div className="text-center">
+                <div className="font-serif text-3xl md:text-4xl text-amber-700">{countdown.minutes}</div>
+                <div className="text-xs text-warm-light uppercase tracking-wider mt-1">min</div>
+              </div>
             </div>
           </div>
-        </div>
 
-        {/* 上传区域 */}
-        {!hasBottle && !showUploadConfirm && (
-          <div className="card max-w-xl mx-auto mb-8">
-            <h3 className="text-xl font-bold text-gray-800 mb-4 text-center">🍾 投放你的瓶子</h3>
-            
-            <input
-              type="file"
-              accept="image/*,video/*"
-              onChange={(e) => setFile(e.target.files?.[0] || null)}
-              className="hidden"
-              id="file-input"
-            />
-            
-            <label
-              htmlFor="file-input"
-              className="block border-2 border-dashed border-orange-300 rounded-2xl p-8 cursor-pointer hover:border-orange-400 hover:bg-orange-50/50 transition-all text-center"
-            >
-              {file ? (
-                <div>
-                  <div className="text-4xl mb-2">📎</div>
-                  <p className="text-gray-800 font-medium">{file.name}</p>
-                  <p className="text-sm text-gray-500">{(file.size / 1024 / 1024).toFixed(2)} MB</p>
-                </div>
-              ) : (
-                <div>
-                  <div className="text-4xl mb-2">📤</div>
-                  <p className="text-gray-600">点击选择图片或视频</p>
-                  <p className="text-sm text-gray-400 mt-1">最大 50MB</p>
+          {/* Upload Area - Initial State */}
+          {!hasBottle && !showUploadConfirm && (
+            <div className="card max-w-md mx-auto mb-12 animate-fade-in delay-200" style={{ opacity: 0 }}>
+              <div className="text-center mb-8">
+                <div className="text-4xl mb-4 animate-float">🍾</div>
+                <h2 className="font-serif text-2xl text-amber-800 mb-2">Leave your bottle</h2>
+                <p className="text-warm text-sm">You can only do this once.</p>
+              </div>
+              
+              <input
+                type="file"
+                accept="image/*,video/*"
+                onChange={(e) => setFile(e.target.files?.[0] || null)}
+                className="hidden"
+                id="file-input"
+              />
+              
+              <label
+                htmlFor="file-input"
+                className="block border border-dashed border-amber-300 rounded-xl p-8 cursor-pointer hover:border-amber-400 hover:bg-amber-50/30 transition-all duration-300 text-center group"
+              >
+                {file ? (
+                  <div>
+                    <div className="text-3xl mb-3 opacity-70">📎</div>
+                    <p className="text-amber-800 font-medium">{file.name}</p>
+                    <p className="text-sm text-warm-light mt-1">{(file.size / 1024 / 1024).toFixed(2)} MB</p>
+                  </div>
+                ) : (
+                  <div>
+                    <div className="text-3xl mb-3 opacity-50 group-hover:opacity-70 transition-opacity">+</div>
+                    <p className="text-warm">Select an image or video</p>
+                    <p className="text-sm text-warm-light mt-1">Max 50MB</p>
+                  </div>
+                )}
+              </label>
+
+              {file && (
+                <button
+                  onClick={handleStartUpload}
+                  className="mt-6 w-full btn-primary"
+                >
+                  Leave your bottle
+                </button>
+              )}
+            </div>
+          )}
+
+          {/* Cooldown Confirmation */}
+          {!hasBottle && showUploadConfirm && (
+            <div className="card max-w-md mx-auto mb-12 text-center animate-fade-in">
+              <h2 className="font-serif text-2xl text-amber-800 mb-4">Take a moment.</h2>
+              <p className="text-warm leading-relaxed mb-6">
+                You are about to leave the only bottle<br />
+                that represents your 2025.<br /><br />
+                <span className="text-warm-light italic">There will be no edits. No retries.</span>
+              </p>
+              
+              {file && (
+                <div className="card-subtle mb-6">
+                  <p className="text-sm text-warm">Selected: {file.name}</p>
                 </div>
               )}
-            </label>
 
-            {file && (
-              <button
-                onClick={handleStartUpload}
-                className="mt-6 w-full btn-primary"
-              >
-                投放瓶子
-              </button>
-            )}
+              {cooldown > 0 ? (
+                <div className="mb-8">
+                  <div className="font-serif text-5xl text-amber-600 mb-2">{cooldown}</div>
+                  <p className="text-sm text-warm-light">seconds to reflect</p>
+                </div>
+              ) : (
+                <p className="text-amber-600 mb-6">Ready when you are.</p>
+              )}
 
-            <p className="mt-4 text-sm text-center text-red-500 font-medium">
-              ⚠️ 每人仅有一次机会，上传后无法撤回或修改
-            </p>
-          </div>
-        )}
-
-        {/* 冷静期确认 */}
-        {!hasBottle && showUploadConfirm && (
-          <div className="card max-w-xl mx-auto mb-8 text-center">
-            <div className="text-5xl mb-4">⏳</div>
-            <h3 className="text-xl font-bold text-gray-800 mb-2">确认投放</h3>
-            <p className="text-gray-600 mb-4">
-              这是你唯一的机会，一旦投放将无法撤回
-            </p>
-            
-            {file && (
-              <div className="bg-orange-50 rounded-xl p-4 mb-4">
-                <p className="text-sm text-gray-600">已选择: {file.name}</p>
+              <div className="flex gap-3">
+                <button
+                  onClick={handleCancelUpload}
+                  disabled={uploading}
+                  className="flex-1 btn-secondary"
+                >
+                  Go back
+                </button>
+                <button
+                  onClick={handleConfirmUpload}
+                  disabled={cooldown > 0 || uploading}
+                  className="flex-1 btn-primary"
+                >
+                  {uploading ? 'Sending your bottle into the sea…' : 'Let it go'}
+                </button>
               </div>
-            )}
+            </div>
+          )}
 
-            {cooldown > 0 ? (
-              <div className="mb-6">
-                <div className="text-4xl font-bold text-orange-600 mb-2">{cooldown}s</div>
-                <p className="text-sm text-gray-500">冷静期倒计时</p>
-              </div>
+          {/* Sealed State - Already uploaded */}
+          {hasBottle && (
+            <div className="card max-w-md mx-auto mb-12 text-center animate-fade-in">
+              <div className="text-4xl mb-4 animate-float">🌊</div>
+              <h2 className="font-serif text-2xl text-amber-800 mb-3">Your bottle is already drifting.</h2>
+              <p className="text-warm leading-relaxed">
+                You've said everything you're allowed to say here.<br />
+                Now you can only listen.
+              </p>
+            </div>
+          )}
+
+          {/* Browse Section */}
+          <div className="card max-w-md mx-auto mb-12 text-center animate-fade-in delay-300" style={{ opacity: 0 }}>
+            {remainingViews > 0 ? (
+              <>
+                <h3 className="font-serif text-xl text-amber-800 mb-2">Discover a bottle</h3>
+                <p className="text-warm text-sm mb-6">
+                  {remainingViews} {remainingViews === 1 ? 'chance' : 'chances'} left today
+                </p>
+                <button
+                  onClick={handleOpenBottle}
+                  disabled={fetchingBottle}
+                  className="btn-secondary"
+                >
+                  {fetchingBottle ? 'Searching…' : 'Open a bottle'}
+                </button>
+              </>
             ) : (
-              <p className="text-green-600 font-medium mb-4">✓ 冷静期已结束，可以投放了</p>
+              <>
+                <h3 className="font-serif text-xl text-amber-800 mb-2">That's all for today.</h3>
+                <p className="text-warm text-sm">Let the rest drift.</p>
+              </>
             )}
+          </div>
 
-            <div className="flex gap-3">
-              <button
-                onClick={handleCancelUpload}
-                disabled={uploading}
-                className="flex-1 btn-secondary"
-              >
-                取消
-              </button>
-              <button
-                onClick={handleConfirmUpload}
-                disabled={cooldown > 0 || uploading}
-                className="flex-1 btn-primary"
-              >
-                {uploading ? '投放中...' : '确认投放'}
-              </button>
+          {/* How it works */}
+          <div className="max-w-lg mx-auto mb-12 animate-fade-in delay-400" style={{ opacity: 0 }}>
+            <div className="divider mb-8"></div>
+            <div className="grid grid-cols-3 gap-6 text-center">
+              <div>
+                <div className="text-2xl mb-2 opacity-60">○</div>
+                <p className="text-sm text-warm-light">One upload<br />per person</p>
+              </div>
+              <div>
+                <div className="text-2xl mb-2 opacity-60">◇</div>
+                <p className="text-sm text-warm-light">Random<br />discovery</p>
+              </div>
+              <div>
+                <div className="text-2xl mb-2 opacity-60">□</div>
+                <p className="text-sm text-warm-light">Sealed after<br />2026</p>
+              </div>
             </div>
           </div>
-        )}
 
-        {/* 已封印状态 */}
-        {hasBottle && (
-          <div className="card max-w-xl mx-auto mb-8 text-center py-8">
-            <div className="text-5xl mb-4">🍾</div>
-            <h3 className="text-xl font-bold text-gray-800 mb-2">你的瓶子已投入大海</h3>
-            <p className="text-gray-600">愿它漂向远方，被有缘人发现</p>
-          </div>
-        )}
+          {/* Bottle Viewer Modal */}
+          {viewingBottle && (
+            <div className="fixed inset-0 modal-overlay flex items-center justify-center p-4 z-50 animate-fade-in-slow">
+              <div className="bg-white rounded-2xl max-w-2xl w-full max-h-[90vh] overflow-hidden shadow-2xl">
+                <div className="p-5 border-b border-amber-100 flex justify-between items-center">
+                  <span className="text-warm text-sm italic">A moment from someone's 2025</span>
+                  <button
+                    onClick={() => setViewingBottle(null)}
+                    className="text-warm-light hover:text-warm text-xl transition-colors w-8 h-8 flex items-center justify-center rounded-full hover:bg-amber-50"
+                  >
+                    ×
+                  </button>
+                </div>
+                <div className="p-5">
+                  {viewingBottle.content_type === 'video' ? (
+                    <video
+                      src={viewingBottle.content_url}
+                      controls
+                      autoPlay
+                      className="w-full rounded-lg"
+                    />
+                  ) : (
+                    <img
+                      src={viewingBottle.content_url}
+                      alt="A bottle's content"
+                      className="w-full rounded-lg"
+                    />
+                  )}
+                </div>
+                <div className="p-5 border-t border-amber-100 flex justify-between items-center">
+                  <button
+                    onClick={() => {
+                      navigator.clipboard.writeText(`${window.location.origin}/bottle/${viewingBottle.id}`);
+                      toast.success('Link copied');
+                    }}
+                    className="text-warm hover:text-amber-600 text-sm transition-colors"
+                  >
+                    Copy link
+                  </button>
+                  <button
+                    onClick={() => {
+                      setViewingBottle(null);
+                      handleOpenBottle();
+                    }}
+                    disabled={remainingViews <= 0}
+                    className="text-amber-600 hover:text-amber-700 text-sm disabled:text-warm-light transition-colors"
+                  >
+                    Next bottle →
+                  </button>
+                </div>
+              </div>
+            </div>
+          )}
 
-        {/* 浏览瓶子 */}
-        <div className="card max-w-xl mx-auto mb-8 text-center">
-          <h3 className="text-xl font-bold text-gray-800 mb-4">🌊 发现瓶子</h3>
-          <p className="text-gray-600 mb-4">
-            今日剩余 <span className="font-bold text-orange-600">{remainingViews}</span> 次机会
+        </div>
+      </main>
+
+      {/* Footer */}
+      <footer className="py-12 px-4 text-center animate-fade-in delay-500" style={{ opacity: 0 }}>
+        <div className="max-w-md mx-auto">
+          <p className="text-warm text-sm leading-relaxed mb-4">
+            We welcome you to share your 2025 with the world,<br />
+            and we hope 2026 will be even better!
           </p>
-          <button
-            onClick={handleOpenBottle}
-            disabled={fetchingBottle || remainingViews <= 0}
-            className="btn-primary"
-          >
-            {fetchingBottle ? '寻找中...' : '打开一个瓶子'}
-          </button>
+          <p className="text-warm-light text-xs opacity-60">
+            Built quietly by{' '}
+            <a 
+              href="https://x.com/linghuchong" 
+              target="_blank" 
+              rel="noopener noreferrer"
+              className="hover:text-amber-600 transition-colors"
+            >
+              @linghuchong
+            </a>
+          </p>
         </div>
-
-        {/* 显示瓶子内容 */}
-        {viewingBottle && (
-          <div className="fixed inset-0 bg-black/60 flex items-center justify-center p-4 z-50">
-            <div className="bg-white rounded-3xl max-w-2xl w-full max-h-[90vh] overflow-hidden">
-              <div className="p-4 border-b flex justify-between items-center">
-                <span className="text-gray-600">来自某人的 2025</span>
-                <button
-                  onClick={() => setViewingBottle(null)}
-                  className="text-gray-400 hover:text-gray-600 text-2xl"
-                >
-                  ✕
-                </button>
-              </div>
-              <div className="p-4">
-                {viewingBottle.content_type === 'video' ? (
-                  <video
-                    src={viewingBottle.content_url}
-                    controls
-                    autoPlay
-                    className="w-full rounded-xl"
-                  />
-                ) : (
-                  <img
-                    src={viewingBottle.content_url}
-                    alt="Bottle content"
-                    className="w-full rounded-xl"
-                  />
-                )}
-              </div>
-              <div className="p-4 border-t flex justify-between">
-                <button
-                  onClick={() => {
-                    navigator.clipboard.writeText(`${window.location.origin}/bottle/${viewingBottle.id}`);
-                    toast.success('链接已复制');
-                  }}
-                  className="text-orange-600 hover:text-orange-700"
-                >
-                  🔗 复制链接
-                </button>
-                <button
-                  onClick={() => {
-                    setViewingBottle(null);
-                    handleOpenBottle();
-                  }}
-                  disabled={remainingViews <= 0}
-                  className="text-orange-600 hover:text-orange-700 disabled:text-gray-400"
-                >
-                  下一个 →
-                </button>
-              </div>
-            </div>
-          </div>
-        )}
-
-        {/* 说明 */}
-        <div className="grid md:grid-cols-3 gap-4 max-w-4xl mx-auto mb-8">
-          <div className="card text-center p-4">
-            <div className="text-2xl mb-2">1️⃣</div>
-            <h4 className="font-bold text-gray-800 mb-1">一次机会</h4>
-            <p className="text-sm text-gray-600">每人仅能上传一次</p>
-          </div>
-          <div className="card text-center p-4">
-            <div className="text-2xl mb-2">2️⃣</div>
-            <h4 className="font-bold text-gray-800 mb-1">随机发现</h4>
-            <p className="text-sm text-gray-600">每天最多看 10 个瓶子</p>
-          </div>
-          <div className="card text-center p-4">
-            <div className="text-2xl mb-2">3️⃣</div>
-            <h4 className="font-bold text-gray-800 mb-1">永久封存</h4>
-            <p className="text-sm text-gray-600">2026年元旦后不再接受新内容</p>
-          </div>
-        </div>
-
-        {/* 页脚 */}
-        <footer className="text-center text-gray-500 text-sm py-4">
-          <p>© 2025 One Bottle</p>
-        </footer>
-      </div>
+      </footer>
     </div>
   );
 }
-
