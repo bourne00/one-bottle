@@ -1,0 +1,22 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+body {
+  background: linear-gradient(180deg, #FFFBF5 0%, #FFF7ED 50%, #FFEDD5 100%);
+  min-height: 100vh;
+  font-family: system-ui, sans-serif;
+}
+
+.btn-primary {
+  @apply px-8 py-4 bg-gradient-to-r from-orange-500 to-orange-600 text-white font-semibold rounded-full shadow-lg hover:from-orange-600 hover:to-orange-700 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed;
+}
+
+.btn-secondary {
+  @apply px-8 py-4 bg-white text-orange-600 font-semibold rounded-full shadow-md border-2 border-orange-200 hover:bg-orange-50 transition-all duration-300 disabled:opacity-50;
+}
+
+.card {
+  @apply bg-white/90 rounded-3xl shadow-xl p-6 border border-orange-100;
+}
+
