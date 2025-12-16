@@ -39,7 +39,7 @@ export async function POST(request: NextRequest) {
       .select('bottle_id')
       .eq('viewer_id', viewer_id);
 
-    const viewedIds = viewedData?.map(v => v.bottle_id) || [];
+    const viewedIds: string[] = viewedData?.map((v: { bottle_id: string }) => v.bottle_id) || [];
 
     // 查询随机瓶子（排除自己的和已看过的）
     let query = supabase
@@ -90,4 +90,3 @@ export async function POST(request: NextRequest) {
     );
   }
 }
-
