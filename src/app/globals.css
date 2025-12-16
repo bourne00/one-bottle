@@ -2,21 +2,189 @@
 @tailwind components;
 @tailwind utilities;
 
-body {
-  background: linear-gradient(180deg, #FFFBF5 0%, #FFF7ED 50%, #FFEDD5 100%);
-  min-height: 100vh;
-  font-family: system-ui, sans-serif;
+@import url('https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Source+Sans+3:wght@300;400;500;600&display=swap');
+
+:root {
+  --color-cream: #FDFBF7;
+  --color-cream-dark: #F9F5EE;
+  --color-amber-50: #FFFBEB;
+  --color-amber-100: #FEF3C7;
+  --color-amber-200: #FDE68A;
+  --color-amber-400: #FBBF24;
+  --color-amber-500: #F59E0B;
+  --color-amber-600: #D97706;
+  --color-amber-700: #B45309;
+  --color-amber-800: #92400E;
+  --color-warm-gray: #78716C;
+  --color-warm-gray-light: #A8A29E;
 }
 
+body {
+  background: linear-gradient(180deg, var(--color-cream) 0%, var(--color-cream-dark) 100%);
+  min-height: 100vh;
+  font-family: 'Source Sans 3', system-ui, sans-serif;
+  color: #44403C;
+}
+
+/* Elegant serif for headings */
+.font-serif {
+  font-family: 'Libre Baskerville', Georgia, serif;
+}
+
+/* Fade in animation */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeInSlow {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-6px);
+  }
+}
+
+.animate-fade-in {
+  animation: fadeIn 0.6s ease-out forwards;
+}
+
+.animate-fade-in-slow {
+  animation: fadeInSlow 1s ease-out forwards;
+}
+
+.animate-float {
+  animation: float 4s ease-in-out infinite;
+}
+
+.delay-100 { animation-delay: 0.1s; }
+.delay-200 { animation-delay: 0.2s; }
+.delay-300 { animation-delay: 0.3s; }
+.delay-400 { animation-delay: 0.4s; }
+.delay-500 { animation-delay: 0.5s; }
+
+/* Buttons */
 .btn-primary {
-  @apply px-8 py-4 bg-gradient-to-r from-orange-500 to-orange-600 text-white font-semibold rounded-full shadow-lg hover:from-orange-600 hover:to-orange-700 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed;
+  @apply px-8 py-4 text-white font-medium rounded-full transition-all duration-300 disabled:opacity-40 disabled:cursor-not-allowed;
+  background: linear-gradient(135deg, var(--color-amber-500) 0%, var(--color-amber-600) 100%);
+  box-shadow: 0 4px 14px rgba(217, 119, 6, 0.25);
+}
+
+.btn-primary:hover:not(:disabled) {
+  transform: translateY(-1px);
+  box-shadow: 0 6px 20px rgba(217, 119, 6, 0.35);
+}
+
+.btn-primary:active:not(:disabled) {
+  transform: translateY(0);
 }
 
 .btn-secondary {
-  @apply px-8 py-4 bg-white text-orange-600 font-semibold rounded-full shadow-md border-2 border-orange-200 hover:bg-orange-50 transition-all duration-300 disabled:opacity-50;
+  @apply px-8 py-4 font-medium rounded-full transition-all duration-300 disabled:opacity-40;
+  background: rgba(255, 255, 255, 0.8);
+  color: var(--color-amber-700);
+  border: 1px solid rgba(217, 119, 6, 0.2);
 }
 
+.btn-secondary:hover:not(:disabled) {
+  background: rgba(255, 255, 255, 1);
+  border-color: rgba(217, 119, 6, 0.4);
+}
+
+/* Cards */
 .card {
-  @apply bg-white/90 rounded-3xl shadow-xl p-6 border border-orange-100;
+  @apply rounded-2xl p-8;
+  background: rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(217, 119, 6, 0.08);
+  box-shadow: 0 4px 24px rgba(120, 113, 108, 0.06);
 }
 
+.card-subtle {
+  @apply rounded-xl p-6;
+  background: rgba(255, 251, 235, 0.5);
+  border: 1px solid rgba(217, 119, 6, 0.06);
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(217, 119, 6, 0.2);
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(217, 119, 6, 0.3);
+}
+
+/* Typography */
+.text-warm {
+  color: var(--color-warm-gray);
+}
+
+.text-warm-light {
+  color: var(--color-warm-gray-light);
+}
+
+.text-amber {
+  color: var(--color-amber-600);
+}
+
+/* Decorative elements */
+.divider {
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(217, 119, 6, 0.15), transparent);
+}
+
+/* Loading state */
+.loading-pulse {
+  animation: pulse 2s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0%, 100% {
+    opacity: 0.4;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+
+/* Modal overlay */
+.modal-overlay {
+  background: rgba(68, 64, 60, 0.6);
+  backdrop-filter: blur(4px);
+}
+
+/* Focus styles */
+input:focus, button:focus {
+  outline: none;
+}
+
+input:focus-visible, button:focus-visible {
+  outline: 2px solid var(--color-amber-400);
+  outline-offset: 2px;
+}
